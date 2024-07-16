@@ -1,8 +1,8 @@
 package cc.worldmandia
 
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 
-suspend fun main(): Unit = coroutineScope {
+fun main(): Unit = runBlocking {
     val server = WMMinecraftServer()
     server.start()
     server.enableSkinsListener()

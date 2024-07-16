@@ -12,10 +12,10 @@ plugins {
 
 dependencyResolutionManagement {
     repositories {
+        mavenLocal()
         maven("https://repo.worldmandia.cc/snapshots")
         maven("https://repo.worldmandia.cc/releases")
         maven("https://jitpack.io")
-        mavenLocal()
         mavenCentral()
         maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     }

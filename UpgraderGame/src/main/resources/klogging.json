@@ -9,7 +9,7 @@
     {
       "levelRanges": [
         {
-          "fromMinLevel": "INFO",
+          "fromMinLevel": "TRACE",
           "stopOnMatch": true,
           "toSinks": [
             "stdout"
