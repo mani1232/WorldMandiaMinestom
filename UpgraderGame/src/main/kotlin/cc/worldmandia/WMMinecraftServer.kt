@@ -60,10 +60,10 @@ class WMMinecraftServer {
         OpenToLAN.open()
         MojangAuth.init()
 
-        File("worlds/").mkdirs()
+        File("/home/container/worlds/").mkdirs()
 
         world.setGenerator { unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK) }
-        val loader = PolarLoader(Path.of("worlds/test.polar")).setParallel(true)
+        val loader = PolarLoader(Path.of("/home/container/worlds/test.polar")).setParallel(true)
         loader.world().setCompression(PolarWorld.CompressionType.LZ4_FAST)
         world.chunkLoader = loader
         world.chunkSupplier = WMChunkSupplier()
