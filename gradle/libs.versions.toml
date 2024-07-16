@@ -71,7 +71,5 @@ ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
-docker = { id = "com.bmuschko.docker-remote-api", version.ref = "docker" }
-docker-java = { id = "com.bmuschko.docker-java-application", version.ref = "docker" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 updateDeps = { id = "com.github.ben-manes.versions", version.ref = "updateVersions" }

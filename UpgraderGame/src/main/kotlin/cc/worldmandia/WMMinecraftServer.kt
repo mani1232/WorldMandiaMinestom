@@ -19,11 +19,12 @@ import net.minestom.server.extras.MojangAuth
 import net.minestom.server.extras.lan.OpenToLAN
 import net.minestom.server.instance.block.Block
 import net.minestom.server.world.DimensionType
-import java.io.File
+import java.nio.file.InvalidPathException
 import java.nio.file.Path
 import kotlin.time.Duration.Companion.seconds
 
 val LOGGER = logger("General")
+val BASE_PATH = Path.of(if (System.getProperty("os.name").contains(Regex(".*(?:win|mac).*"))) "" else "/home/container/") ?: throw InvalidPathException("base_path", "Cant resolve base path")
 
 class WMMinecraftServer {
 
@@ -60,10 +61,8 @@ class WMMinecraftServer {
         OpenToLAN.open()
         MojangAuth.init()
 
-        File("/home/container/worlds/").mkdirs()
-
         world.setGenerator { unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK) }
-        val loader = PolarLoader(Path.of("/home/container/worlds/test.polar")).setParallel(true)
+        val loader = PolarLoader(BASE_PATH.resolve("/worlds/test.polar")).setParallel(true)
         loader.world().setCompression(PolarWorld.CompressionType.LZ4_FAST)
         world.chunkLoader = loader
         world.chunkSupplier = WMChunkSupplier()
