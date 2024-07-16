@@ -24,7 +24,7 @@ import java.nio.file.Path
 import kotlin.time.Duration.Companion.seconds
 
 val LOGGER = logger("General")
-val BASE_PATH = Path.of(if (System.getProperty("os.name").contains(Regex(".*(?:win|mac).*"))) "" else "/home/container/") ?: throw InvalidPathException("base_path", "Cant resolve base path")
+val BASE_PATH = Path.of(if (System.getProperty("os.name").contains(Regex("(?i).*(?:win|mac).*"))) "" else "/home/container/") ?: throw InvalidPathException("base_path", "Cant resolve base path")
 
 class WMMinecraftServer {
 
@@ -61,8 +61,11 @@ class WMMinecraftServer {
         OpenToLAN.open()
         MojangAuth.init()
 
+        val worldsDirPath = BASE_PATH.resolve("worlds/")
+        worldsDirPath.toFile().mkdirs()
+
         world.setGenerator { unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK) }
-        val loader = PolarLoader(BASE_PATH.resolve("/worlds/test.polar")).setParallel(true)
+        val loader = PolarLoader(worldsDirPath.resolve("test.polar")).setParallel(true)
         loader.world().setCompression(PolarWorld.CompressionType.LZ4_FAST)
         world.chunkLoader = loader
         world.chunkSupplier = WMChunkSupplier()
