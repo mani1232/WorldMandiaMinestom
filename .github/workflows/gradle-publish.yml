@@ -38,7 +38,7 @@ jobs:
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
     - name: Publish to GitHub Packages
-      run: ./gradlew wearhouse-backend:publishImage
+      run: ./gradlew publishImage
       env:
         DOCKER_NAME: ${{ secrets.DOCKERNAME }} # token name
         DOCKER_SECRET: ${{ secrets.DOCKERSECRET }} # token secret (password)
