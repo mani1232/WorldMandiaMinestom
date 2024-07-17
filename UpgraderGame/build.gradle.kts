@@ -6,10 +6,6 @@ plugins {
     alias(libs.plugins.ktor)
 }
 
-group = "cc.worldmandia"
-
-version = "1.0.0"
-
 kotlin {
     jvmToolchain(21)
 }
@@ -44,8 +40,8 @@ ktor {
         externalRegistry.set(
             DockerImageRegistry.dockerHub(
                 appName = provider { "minestom-app" },
-                username = provider { "mani12322" },
-                password = provider { "dckr_pat_iekI2Z2uTFIKo9dCjrPy5kzmY6E" }
+                username = providers.environmentVariable("DOCKER_NAME"),
+                password = providers.environmentVariable("DOCKER_SECRET")
             )
         )
     }

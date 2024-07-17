@@ -21,5 +21,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ModernBedWars"
+rootProject.name = "WorldMandiaMinestom"
 include("UpgraderGame")
