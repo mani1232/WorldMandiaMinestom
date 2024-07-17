@@ -39,12 +39,13 @@ ktor {
         jreVersion.set(JavaVersion.VERSION_21)
         localImageName.set("minestom-app")
         imageTag.set(version.toString())
+        customBaseImage.set("azul/zulu-openjdk:21-latest")
 
         externalRegistry.set(
             DockerImageRegistry.dockerHub(
                 appName = provider { "minestom-app" },
-                username = providers.gradleProperty("DOCKER_HUB_USERNAME"),
-                password = providers.gradleProperty("DOCKER_HUB_PASSWORD")
+                username = provider { "mani12322" },
+                password = provider { "dckr_pat_iekI2Z2uTFIKo9dCjrPy5kzmY6E" }
             )
         )
     }
