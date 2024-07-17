@@ -43,7 +43,8 @@ class WMMinecraftServer {
             strategy = KacheStrategy.LRU
         }
 
-    suspend fun start(address: String = "0.0.0.0", port: Int = 7070) = coroutineScope {
+    suspend fun start(address: String = "0.0.0.0", port: Int = 25400) = coroutineScope {
+        LOGGER.info { "Port $port" }
         Runtime.getRuntime().addShutdownHook(object : Thread() {
             override fun run(): Unit = runBlocking {
                 LOGGER.info("Shutting down...")
