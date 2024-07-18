@@ -46,6 +46,11 @@ ktor {
                 //password = providers.environmentVariable("DOCKER_SECRET")
             )
         )
+        jib {
+            container {
+                workingDirectory = "/home/container"
+            }
+        }
     }
 }
 
