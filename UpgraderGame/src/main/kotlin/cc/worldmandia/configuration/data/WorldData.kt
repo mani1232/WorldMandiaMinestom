@@ -1,4 +1,4 @@
-package cc.worldmandia.data
+package cc.worldmandia.configuration.data
 
 import kotlinx.serialization.Serializable
 

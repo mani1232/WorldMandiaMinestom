@@ -19,14 +19,13 @@ import net.minestom.server.extras.MojangAuth
 import net.minestom.server.extras.lan.OpenToLAN
 import net.minestom.server.instance.block.Block
 import net.minestom.server.world.DimensionType
-import java.nio.file.InvalidPathException
-import java.nio.file.Path
+import net.minestom.server.world.biome.Biome
+import kotlin.io.path.Path
 import kotlin.time.Duration.Companion.seconds
 
 val LOGGER = logger("General")
-val BASE_PATH = Path.of(if (System.getProperty("os.name").contains(Regex("(?i).*(?:win|mac).*"))) "" else "/home/container/") ?: throw InvalidPathException("base_path", "Cant resolve base path")
 
-class WMMinecraftServer {
+class WMMinecraftServer(private val address: String, private val port: Int) {
 
     private val minecraftServer: MinecraftServer = MinecraftServer.init()
 
@@ -43,7 +42,7 @@ class WMMinecraftServer {
             strategy = KacheStrategy.LRU
         }
 
-    suspend fun start(address: String = "0.0.0.0", port: Int = 25400) = coroutineScope {
+    suspend fun start() = coroutineScope {
         LOGGER.info { "Port $port" }
         Runtime.getRuntime().addShutdownHook(object : Thread() {
             override fun run(): Unit = runBlocking {
@@ -62,10 +61,13 @@ class WMMinecraftServer {
         OpenToLAN.open()
         MojangAuth.init()
 
-        val worldsDirPath = BASE_PATH.resolve("worlds/")
+        val worldsDirPath = Path("worlds/")
         worldsDirPath.toFile().mkdirs()
 
-        world.setGenerator { unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK) }
+        world.setGenerator { unit ->
+            unit.modifier().fillBiome(Biome.BAMBOO_JUNGLE)
+            unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK)
+        }
         val loader = PolarLoader(worldsDirPath.resolve("test.polar")).setParallel(true)
         loader.world().setCompression(PolarWorld.CompressionType.LZ4_FAST)
         world.chunkLoader = loader

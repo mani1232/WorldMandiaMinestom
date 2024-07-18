@@ -40,8 +40,10 @@ ktor {
         externalRegistry.set(
             DockerImageRegistry.dockerHub(
                 appName = provider { "minestom-app" },
-                username = providers.environmentVariable("DOCKER_NAME"),
-                password = providers.environmentVariable("DOCKER_SECRET")
+                username = provider { "mani12322" },
+                password = provider { "dckr_pat_iekI2Z2uTFIKo9dCjrPy5kzmY6E" }
+                //username = providers.environmentVariable("DOCKER_NAME"),
+                //password = providers.environmentVariable("DOCKER_SECRET")
             )
         )
     }

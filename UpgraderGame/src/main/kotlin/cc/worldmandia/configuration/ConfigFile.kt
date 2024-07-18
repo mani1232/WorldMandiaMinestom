@@ -1,10 +1,33 @@
 package cc.worldmandia.configuration
 
+import cc.worldmandia.configuration.data.ConfigData
+import cc.worldmandia.configuration.data.WorldData
+import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.file.storeOf
-import kotlinx.io.files.Path
+import okio.Path.Companion.toOkioPath
+import kotlin.io.path.Path
 
-object ConfigFile {
-    val config = storeOf(Path("config.json"), 1)
+class ConfigFile {
 
-    val world = storeOf(Path("worlds.json"), 1)
+    private val configPath = Path("config.json").toOkioPath()
+    private val worldPath = Path("world.json").toOkioPath()
+
+    init {
+        config = storeOf(configPath, ConfigData())
+        world = storeOf(worldPath, WorldData())
+    }
+
+    suspend fun update() {
+        if (!configPath.toFile().exists()) {
+            config.reset()
+        }
+        if (!worldPath.toFile().exists()) {
+            world.reset()
+        }
+    }
+
+    companion object {
+        lateinit var config: KStore<ConfigData>
+        lateinit var world: KStore<WorldData>
+    }
 }
