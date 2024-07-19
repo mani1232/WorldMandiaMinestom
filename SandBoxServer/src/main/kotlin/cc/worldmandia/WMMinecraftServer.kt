@@ -61,11 +61,10 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
             }
         })
 
-        globalEventHandler.addSuspendingListener(minecraftServer, ServerListPingEvent::class.java) {
-            it.responseData = it.responseData.apply {
-                this.maxPlayer = ConfigFiles.config.data.maxOnline
-                this.entries.addAll(connectionManager.onlinePlayers)
-            }
+        globalEventHandler.addListener(ServerListPingEvent::class.java) {
+            val data = it.responseData
+            data.maxPlayer = ConfigFiles.config.data.maxOnline
+            data.entries.addAll(connectionManager.onlinePlayers)
         }
 
         minecraftServer.launch {
