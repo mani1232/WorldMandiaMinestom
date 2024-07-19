@@ -1,6 +1,8 @@
-package cc.worldmandia.configuration.data
+package cc.worldmandia.configuration.files
 
 import cc.worldmandia.configuration.ConfigUtils
+import cc.worldmandia.configuration.files.data.ConfigData
+import cc.worldmandia.configuration.files.data.WorldData
 import cc.worldmandia.configuration.impl.DefaultConfig
 
 object ConfigFiles {

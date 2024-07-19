@@ -1,7 +1,7 @@
 package cc.worldmandia
 
 import cc.worldmandia.chunk.WMChunkSupplier
-import cc.worldmandia.configuration.data.ConfigFiles
+import cc.worldmandia.configuration.files.ConfigFiles
 import com.github.shynixn.mccoroutine.minestom.addSuspendingListener
 import com.github.shynixn.mccoroutine.minestom.launch
 import com.mayakapps.kache.InMemoryKache
@@ -16,6 +16,7 @@ import net.minestom.server.entity.GameMode
 import net.minestom.server.entity.PlayerSkin
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
 import net.minestom.server.event.player.PlayerSkinInitEvent
+import net.minestom.server.event.server.ServerListPingEvent
 import net.minestom.server.extras.MojangAuth
 import net.minestom.server.extras.lan.OpenToLAN
 import net.minestom.server.extras.velocity.VelocityProxy
@@ -34,11 +35,13 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
 
     private val instanceManager = MinecraftServer.getInstanceManager()
 
+    private val connectionManager = MinecraftServer.getConnectionManager()
+
     private val world = instanceManager.createInstanceContainer(DimensionType.OVERWORLD)
 
     private val skinsCache =
         InMemoryKache<String, PlayerSkin>(
-            maxSize = MinecraftServer.getConnectionManager().onlinePlayers.size.toLong() + 1
+            maxSize = ConfigFiles.config.data.maxOnline + ConfigFiles.config.data.advancedSettings.skinsCacheHistorySize
         ) {
             strategy = KacheStrategy.LRU
         }
@@ -57,6 +60,13 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
                 }
             }
         })
+
+        globalEventHandler.addSuspendingListener(minecraftServer, ServerListPingEvent::class.java) {
+            it.responseData = it.responseData.apply {
+                this.maxPlayer = ConfigFiles.config.data.maxOnline
+                this.entries.addAll(connectionManager.onlinePlayers)
+            }
+        }
 
         minecraftServer.launch {
 

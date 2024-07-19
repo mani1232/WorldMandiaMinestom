@@ -1,6 +1,6 @@
 package cc.worldmandia
 
-import cc.worldmandia.configuration.data.ConfigFiles
+import cc.worldmandia.configuration.files.ConfigFiles
 import io.klogging.logger
 import kotlinx.coroutines.runBlocking
 import kotlin.system.measureTimeMillis
