@@ -10,6 +10,7 @@ data class ConfigData(
     val openToLan: Boolean = false,
     val mojangAuth: Boolean = false,
     val brandName: String = "WorldMandia",
+    val favicon: String = "logo.png",
     val velocityProxy: Velocity = Velocity(),
     val advancedSettings: AdvancedSettings = AdvancedSettings(),
 ) {

@@ -10,6 +10,8 @@ import io.klogging.logger
 import kotlinx.coroutines.*
 import net.hollowcube.polar.PolarLoader
 import net.hollowcube.polar.PolarWorld
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.minestom.server.MinecraftServer
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.GameMode
@@ -65,6 +67,8 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
             val data = it.responseData
             data.maxPlayer = ConfigFiles.config.data.maxOnline
             data.entries.addAll(connectionManager.onlinePlayers)
+            data.description = Component.text("My server", NamedTextColor.RED)
+            data.favicon = ConfigFiles.config.data.favicon
         }
 
         minecraftServer.launch {
