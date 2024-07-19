@@ -48,11 +48,13 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
         MinecraftServer.setBrandName(ConfigFiles.config.data.brandName)
         Runtime.getRuntime().addShutdownHook(object : Thread() {
             override fun run(): Unit = runBlocking {
-                LOGGER.info("Shutting down...")
-                world.saveChunksToStorage()
-                LOGGER.info("Worlds saved successfully!")
-                MinecraftServer.stopCleanly()
-                LOGGER.info("Shutting down is DONE!")
+                withContext(Dispatchers.IO) {
+                    LOGGER.info("Shutting down...")
+                    world.saveChunksToStorage()
+                    LOGGER.info("Worlds saved successfully!")
+                    MinecraftServer.stopCleanly()
+                    LOGGER.info("Shutting down is DONE!")
+                }
             }
         })
 
