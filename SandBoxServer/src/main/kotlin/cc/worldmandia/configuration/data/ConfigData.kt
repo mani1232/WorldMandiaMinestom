@@ -8,6 +8,7 @@ data class ConfigData(
     val port: Int = 25400,
     val openToLan: Boolean = false,
     val mojangAuth: Boolean = false,
+    val brandName: String = "WorldMandia",
     val velocityProxy: Velocity = Velocity(),
 ) {
     @Serializable

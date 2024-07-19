@@ -45,16 +45,16 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
 
     suspend fun start() = coroutineScope {
         LOGGER.info { "Starting Minecraft server on $address:$port" }
+        MinecraftServer.setBrandName(ConfigFiles.config.data.brandName)
         Runtime.getRuntime().addShutdownHook(object : Thread() {
             override fun run(): Unit = runBlocking {
                 LOGGER.info("Shutting down...")
                 world.saveChunksToStorage()
                 LOGGER.info("Worlds saved successfully!")
+                MinecraftServer.process().stop()
                 LOGGER.info("Shutting down is DONE!")
             }
         })
-
-        MinecraftServer.setBrandName("WorldMandia")
 
         minecraftServer.launch {
 
@@ -70,8 +70,8 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
         worldsDirPath.toFile().mkdirs()
 
         world.setGenerator { unit ->
-            unit.modifier().fillBiome(Biome.BAMBOO_JUNGLE)
-            unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK)
+            unit.modifier().apply { this.fillBiome(Biome.BAMBOO_JUNGLE) }
+                .apply { this.fillHeight(0, 40, Block.GRASS_BLOCK) }
         }
         val loader = PolarLoader(worldsDirPath.resolve("test.polar")).setParallel(true)
         loader.world().setCompression(PolarWorld.CompressionType.LZ4_FAST)
