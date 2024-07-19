@@ -12,7 +12,7 @@ datetime = "0.6.0"
 cache = "2.1.0"
 minestom = "1f34e60ea6"
 kaml = "0.60.0"
-minestomCoroutines = "2.18.0"
+minestomCoroutines = "2.18.1"
 polar = "dev" #"1.10.0"
 
 [libraries]
