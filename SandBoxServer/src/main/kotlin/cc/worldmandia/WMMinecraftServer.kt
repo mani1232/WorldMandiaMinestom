@@ -25,6 +25,9 @@ import net.minestom.server.extras.velocity.VelocityProxy
 import net.minestom.server.instance.block.Block
 import net.minestom.server.world.DimensionType
 import net.minestom.server.world.biome.Biome
+import java.io.File
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.io.path.Path
 import kotlin.time.Duration.Companion.seconds
 
@@ -48,6 +51,7 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
             strategy = KacheStrategy.LRU
         }
 
+    @OptIn(ExperimentalEncodingApi::class)
     suspend fun start() = coroutineScope {
         LOGGER.info { "Starting Minecraft server on $address:$port" }
         MinecraftServer.setBrandName(ConfigFiles.config.data.brandName)
@@ -68,7 +72,7 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
             data.maxPlayer = ConfigFiles.config.data.maxOnline
             data.entries.addAll(connectionManager.onlinePlayers)
             data.description = Component.text("My server", NamedTextColor.RED)
-            data.favicon = ConfigFiles.config.data.favicon
+            data.favicon = "data:image/png;base64,${Base64.encode(File(ConfigFiles.config.data.favicon).readBytes())}"
         }
 
         minecraftServer.launch {
