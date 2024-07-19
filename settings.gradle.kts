@@ -17,7 +17,6 @@ dependencyResolutionManagement {
         maven("https://repo.worldmandia.cc/releases")
         maven("https://jitpack.io")
         mavenCentral()
-        maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 
