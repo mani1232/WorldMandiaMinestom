@@ -20,9 +20,6 @@ dependencies {
     implementation(libs.other.minestomCoroutines.api)
     implementation(libs.other.kaml)
     implementation(libs.other.polar)
-    implementation(libs.other.kstore)
-    implementation(libs.other.kstore.file)
-    //implementation(libs.other.kstore.storage)
     implementation(libs.kotlin.reflect)
     implementation(libs.minestom)
 }
@@ -33,13 +30,13 @@ ktor {
     }
     docker {
         jreVersion.set(JavaVersion.VERSION_21)
-        localImageName.set("minestom-app")
+        localImageName.set("sandboxserver-local")
         imageTag.set(version.toString())
         customBaseImage.set("azul/zulu-openjdk:21-latest")
 
         externalRegistry.set(
             DockerImageRegistry.dockerHub(
-                appName = provider { "minestom-app" },
+                appName = provider { "sandboxserver" },
                 username = provider { "mani12322" },
                 password = provider { "dckr_pat_iekI2Z2uTFIKo9dCjrPy5kzmY6E" }
                 //username = providers.environmentVariable("DOCKER_NAME"),

@@ -2,7 +2,7 @@
 
 kotlin = "2.0.10-RC"
 ktor = "3.0.0-beta-2" # 3.0.0-beta-2
-klogging = "0.5.14"
+klogging = "0.6.1"
 coroutines = "1.9.0-RC"
 serializationJson = "1.7.1"
 mongoDB = "5.1.1"
@@ -10,8 +10,7 @@ updateVersions = "0.51.0"
 crypto = "0.2.0"
 datetime = "0.6.0"
 cache = "2.1.1-SNAPSHOT"
-minestom = "e5372fd779"
-kstore = "0.8.0"
+minestom = "1f34e60ea6"
 kaml = "0.60.0"
 minestomCoroutines = "2.18.0"
 polar = "dev" #"1.10.0"
@@ -23,11 +22,8 @@ other-cache = { module = "com.mayakapps.kache:kache", version.ref = "cache" }
 other-cache-file = { module = "com.mayakapps.kache:file-kache", version.ref = "cache" }
 other-kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
 other-polar = { module = "dev.hollowcube:polar", version.ref = "polar" }
-other-kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
 other-minestomCoroutines-api = { module = "com.github.shynixn.mccoroutine:mccoroutine-minestom-api", version.ref = "minestomCoroutines" }
 other-minestomCoroutines-core = { module = "com.github.shynixn.mccoroutine:mccoroutine-minestom-core", version.ref = "minestomCoroutines" }
-other-kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
-other-kstore-storage = { module = "io.github.xxfast:kstore-storage", version.ref = "kstore" }
 minestom = { module = "net.minestom:minestom-snapshots", version.ref = "minestom" }
 other-mongodb = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", version.ref = "mongoDB" }
 other-crypto = { module = "com.diglol.crypto:crypto", version.ref = "crypto" }

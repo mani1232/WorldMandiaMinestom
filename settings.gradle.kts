@@ -22,4 +22,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "WorldMandiaMinestom"
-include("UpgraderGame")
+include("SandBoxServer")

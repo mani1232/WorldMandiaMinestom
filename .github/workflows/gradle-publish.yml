@@ -10,7 +10,8 @@ name: Build and Publish
 on:
   push:
     branches:
-      - '**' # We want to run this on all branch pushes
+      - 'master'
+      - 'dev'
     tags-ignore:
       - '**' # We don't want this to run on tags pushes
 
@@ -33,10 +34,27 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3 # v3.1.0
+      uses: gradle/actions/setup-gradle@v3
 
-    # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
-    # the publishing section of your build.gradle
+    - name: Cache Gradle packages
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: "${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}"
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: BuildFat jars
+      run: ./gradlew buildFatJar
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: all-files
+        path: |
+          SandBoxServer/build/libs/
+
     - name: Publish to GitHub Packages
       run: ./gradlew publishImage
       env:
