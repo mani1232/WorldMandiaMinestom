@@ -1,6 +1,7 @@
 package cc.worldmandia
 
 import cc.worldmandia.chunk.WMChunkSupplier
+import cc.worldmandia.configuration.data.ConfigFiles
 import com.github.shynixn.mccoroutine.minestom.addSuspendingListener
 import com.github.shynixn.mccoroutine.minestom.launch
 import com.mayakapps.kache.InMemoryKache
@@ -17,13 +18,13 @@ import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
 import net.minestom.server.event.player.PlayerSkinInitEvent
 import net.minestom.server.extras.MojangAuth
 import net.minestom.server.extras.lan.OpenToLAN
+import net.minestom.server.extras.velocity.VelocityProxy
 import net.minestom.server.instance.block.Block
 import net.minestom.server.world.DimensionType
 import net.minestom.server.world.biome.Biome
 import kotlin.io.path.Path
 import kotlin.time.Duration.Companion.seconds
 
-val LOGGER = logger("General")
 
 class WMMinecraftServer(private val address: String, private val port: Int) {
 
@@ -43,7 +44,7 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
         }
 
     suspend fun start() = coroutineScope {
-        LOGGER.info { "Port $port" }
+        LOGGER.info { "Starting Minecraft server on $address:$port" }
         Runtime.getRuntime().addShutdownHook(object : Thread() {
             override fun run(): Unit = runBlocking {
                 LOGGER.info("Shutting down...")
@@ -56,10 +57,14 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
         MinecraftServer.setBrandName("WorldMandia")
 
         minecraftServer.launch {
+
         }
 
-        OpenToLAN.open()
-        MojangAuth.init()
+        if (ConfigFiles.config.data.openToLan) OpenToLAN.open()
+
+        if (ConfigFiles.config.data.mojangAuth) MojangAuth.init()
+
+        if (ConfigFiles.config.data.velocityProxy.enabled) VelocityProxy.enable(ConfigFiles.config.data.velocityProxy.secretKey)
 
         val worldsDirPath = Path("worlds/")
         worldsDirPath.toFile().mkdirs()
@@ -88,9 +93,11 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
     suspend fun enableAutoSave() = withContext(Dispatchers.IO) {
         launch {
             val log = logger("Auto-Save-World")
+            val autoSaveTime = 60
+            log.info { "Enabled auto save worlds every $autoSaveTime seconds" }
             while (true) {
-                delay(60.seconds)
-                log.info { "World saved" }
+                delay(autoSaveTime.seconds)
+                log.debug { "World saved" }
                 world.saveChunksToStorage()
             }
         }
