@@ -51,7 +51,7 @@ class WMMinecraftServer(private val address: String, private val port: Int) {
                 LOGGER.info("Shutting down...")
                 world.saveChunksToStorage()
                 LOGGER.info("Worlds saved successfully!")
-                MinecraftServer.process().stop()
+                MinecraftServer.stopCleanly()
                 LOGGER.info("Shutting down is DONE!")
             }
         })
