@@ -46,8 +46,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    - name: BuildFat jars
-      run: ./gradlew buildFatJar
+    - name: Build and obfuscate jars
+      run: ./gradlew obfuscate
 
     - uses: actions/upload-artifact@v4
       with:
@@ -55,7 +55,7 @@ jobs:
         path: |
           SandBoxServer/build/libs/
 
-    - name: Publish to GitHub Packages
+    - name: Publish docker image
       run: ./gradlew publishImage
       env:
         DOCKER_NAME: ${{ secrets.DOCKERNAME }} # token name
