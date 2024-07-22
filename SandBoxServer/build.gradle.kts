@@ -11,6 +11,8 @@ kotlin {
     jvmToolchain(21)
 }
 
+val defaultFileName = "${project.name}-$version.jar"
+
 dependencies {
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.serialization.json)
@@ -27,7 +29,7 @@ dependencies {
 
 ktor {
     fatJar {
-        archiveFileName.set("${project.name}-$version.jar")
+        archiveFileName.set(defaultFileName)
     }
     docker {
         jreVersion.set(JavaVersion.VERSION_21)
@@ -78,5 +80,7 @@ tasks.register<ProGuardTask>("obfuscate") {
 
     verbose()
 
-    outjars(layout.buildDirectory.file("libs/${project.name}-$version.jar"))
+    project.delete(layout.buildDirectory.file("libs/$defaultFileName"))
+
+    outjars(layout.buildDirectory.file("libs/$defaultFileName"))
 }
