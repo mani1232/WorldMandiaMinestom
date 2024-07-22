@@ -11,7 +11,7 @@ kotlin {
     jvmToolchain(21)
 }
 
-val defaultFileName = "${project.name}-$version.jar"
+val defaultFileName = "${project.name}-$version"
 
 dependencies {
     implementation(libs.kotlinx.coroutines)
@@ -29,7 +29,7 @@ dependencies {
 
 ktor {
     fatJar {
-        archiveFileName.set(defaultFileName)
+        archiveFileName.set("$defaultFileName.jar")
     }
     docker {
         jreVersion.set(JavaVersion.VERSION_21)
@@ -40,15 +40,27 @@ ktor {
         externalRegistry.set(
             DockerImageRegistry.dockerHub(
                 appName = provider { "sandboxserver" },
-                username = provider { "mani12322" },
-                password = provider { "dckr_pat_iekI2Z2uTFIKo9dCjrPy5kzmY6E" }
-                //username = providers.environmentVariable("DOCKER_NAME"),
-                //password = providers.environmentVariable("DOCKER_SECRET")
+                username = providers.environmentVariable("DOCKER_NAME"),
+                password = providers.environmentVariable("DOCKER_SECRET")
             )
         )
         jib {
             container {
                 workingDirectory = "/home/container"
+                jvmFlags = listOf(
+                    "-Xms128m", "-server",
+                    "-XX:+UseG1GC",
+                    "-XX:+UseStringDeduplication",
+                    "-XX:+UseLargePages",
+                    "-XX:+AlwaysPreTouch",
+                    "-XX:+DisableExplicitGC",
+                    "-XX:+UseNUMA",
+                    "-XX:+UseCompressedOops",
+                    "-XX:+UseCompressedClassPointers",
+                    "-XX:MaxGCPauseMillis=200",
+                    "-XX:ParallelGCThreads=4",
+                    "-XX:ConcGCThreads=2"
+                )
             }
         }
     }
@@ -71,7 +83,8 @@ tasks {
     }
 }
 
-tasks.register<ProGuardTask>("obfuscate") {
+val obfuscateTask = tasks.register<ProGuardTask>("obfuscate") {
+    dependsOn("buildFatJar")
     configuration("proguard-rules.pro")
 
     val file = (tasks["shadowJar"] as Jar).archiveFile
@@ -80,7 +93,18 @@ tasks.register<ProGuardTask>("obfuscate") {
 
     verbose()
 
-    project.delete(layout.buildDirectory.file("libs/$defaultFileName"))
+    outjars(layout.buildDirectory.file("libs/$defaultFileName-obf.jar"))
+}
 
-    outjars(layout.buildDirectory.file("libs/$defaultFileName"))
+tasks.named("jibDockerBuild") {
+    dependsOn(obfuscateTask)
+}
+
+tasks.named("jibDockerBuild") {
+    doFirst {
+        val jarTask = tasks.named("jar").get()
+        val shadowJarTask = tasks.named("shadowJar").get()
+        jarTask.enabled = false
+        shadowJarTask.enabled = false
+    }
 }
