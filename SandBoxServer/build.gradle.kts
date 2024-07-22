@@ -1,4 +1,5 @@
 import io.ktor.plugin.features.*
+import proguard.gradle.ProGuardTask
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -53,4 +54,29 @@ ktor {
 
 application {
     mainClass.set("cc.worldmandia.MainKt")
+}
+
+tasks {
+    shadowJar {
+        relocate("org.jetbrains.kotlinx", "cc.worldmandia.libs.kotlinx")
+        relocate("io.klogging", "cc.worldmandia.libs.klogging")
+        relocate("com.mayakapps.kache", "cc.worldmandia.libs.kache")
+        relocate("com.github.shynixn.mccoroutine", "cc.worldmandia.libs.mccoroutine")
+        relocate("com.charleskorn.kaml", "cc.worldmandia.libs.kaml")
+        relocate("dev.hollowcube", "cc.worldmandia.libs.polar")
+        relocate("org.jetbrains.kotlin", "cc.worldmandia.libs.kotlin")
+        relocate("net.minestom", "cc.worldmandia.libs.minestom")
+    }
+}
+
+tasks.register<ProGuardTask>("obfuscate") {
+    configuration("proguard-rules.pro")
+
+    val file = (tasks["shadowJar"] as Jar).archiveFile
+
+    injars(file)
+
+    verbose()
+
+    outjars(layout.buildDirectory.file("libs/${project.name}-$version.jar"))
 }
